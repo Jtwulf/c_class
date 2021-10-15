@@ -10,7 +10,7 @@ int main(){
 
 	for(int i = 0; i < n; i++){
 		printf("%d番目の変数に格納する値を入力　-> ", i+1);
-		scanf("%d", n_p+i);
+		scanf("%d", &n_p[i]);
 	}
 
 	int max = *n_p;
