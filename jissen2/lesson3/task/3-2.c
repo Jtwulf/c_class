@@ -15,14 +15,14 @@ void bubble_sort(int arr[], int len){
 
 //lower:探索開始位置 upper:探索終了位置 key:探索したい数
 int bin_search(int arr[], int lower, int upper, int key){
-	if(upper - lower <= 1 && arr[lower] != key)
+	if(lower > upper)
 		return -1;
 	else if(arr[(lower+upper)/2] == key)
 		return (lower+upper)/2;
 	else if(arr[(lower+upper)/2] > key)
-		bin_search(arr,lower,((lower+upper)/2),key);
+		bin_search(arr,lower,((lower+upper)/2)-1,key);
 	else if(arr[(lower+upper)/2] < key)
-		bin_search(arr,((lower+upper)/2),upper,key);
+		bin_search(arr,((lower+upper)/2)+1,upper,key);
 
 }
 
