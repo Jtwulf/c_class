@@ -17,7 +17,7 @@ void putlist(element_type *q);
 element_type *getlist(void);
 int getint(void);
 element_type * eraselist(element_type *p);
-
+int is_sorted(element_type *p);
 
 int main(void) {
   element_type *root;
@@ -29,8 +29,16 @@ int main(void) {
   printf("できあがったリストを出力します。\n");
   putlist(root);
 
+
+  if(is_sorted(root) == 1)
+	  printf("このリストはソートされています。\n");
+  else
+	  printf("このリストはソートされていません。\n");
+
+
   printf("リストを消去します。\n");
   root = eraselist(root);
+
 
   return 0;
 }
@@ -111,4 +119,19 @@ element_type * insert(element_type * top, int val)
     new_p->next = cur_p;
   }
   return top;
+}
+
+int is_sorted(element_type *p){
+	element_type *root = p;
+	int flag = 1;
+	element_type *pre;
+	if(root == NULL)
+		return flag;
+	while(root->next != NULL){
+		pre = root;
+		root = root->next;
+		if(root->value < pre->value)
+			flag = 0;
+	}
+	return flag;
 }
