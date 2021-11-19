@@ -18,7 +18,7 @@ element_type *getlist(void);
 int getint(void);
 element_type *eraselist(element_type *p);
 element_type *delete_element(int value, element_type *root);
-element_type *delete_and_connect(element_type root, int a, int b);
+element_type *delete_and_connect(element_type *p, int a, int b);
 
 int main(){
 	element_type *root;
@@ -100,7 +100,50 @@ element_type *eraselist(element_type *p){
 	return NULL;
 }
 
-element_type delete_and_connect(root, a, b){
-	element_type *p, *pre_p, *cur_p;
+element_type *delete_and_connect(element_type *root, int a, int b){
+	int count = 1;
+	element_type *p, *pre_p, *new_pre_p, *temp, *new_root = NULL;
+	p = root;
 
+	//切り取る要素が先頭の場合
+	while((p->value >= a) && (p->value <= b)){
+		temp = p;
+		root = p = p->next;
+
+		temp->next = NULL;
+		if(count == 1)
+			new_root = temp;
+		else
+			new_pre_p->next = temp;
+		new_pre_p = temp;
+		count ++;
+
+		if(p == NULL){
+			return new_root;
+		}
+	}
+	pre_p = root;
+	p = p->next;
+
+	//切り取る要素が先頭以外の場合
+	while(p != NULL){
+		temp = p->next;
+		//見つかったら手前の要素から次の要素へ連結
+		if((p->value >= a) && (p->value <= b)){
+			pre_p->next = p->next;
+
+			p->next = NULL;
+			if(count == 1)
+				new_root = p;
+			else
+				new_pre_p->next = p;
+			new_pre_p = p;
+			count++;
+		}
+		//見つからなかったら手前の要素を更新し次回の探索に備える
+		else
+			pre_p = p;
+		p = temp;
+	}
+	return new_root;
 }
