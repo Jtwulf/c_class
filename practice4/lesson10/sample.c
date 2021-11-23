@@ -4,8 +4,6 @@
 #define FIRST 0
 #define BUFSIZE 100
 #define WORDSIZE 31
-#define DELETED 1
-#define FAILED 0
 
 int buf[BUFSIZE];
 int bufp = 0;
@@ -19,25 +17,25 @@ void putlist(element_type *q);
 element_type *getlist(void);
 int getint(void);
 element_type *eraselist(element_type *p);
-element_type *delete(element_type *top, int val, int *pst);
+element_type *delete(element_type *top, int val);
 
 int main(void) {
   element_type *root;
-  int del_num, *pst;
-  pst = (int *)malloc(sizeof(int));
-  printf("リストの作成\n");
+  int del_num;
+  printf("繝ｪ繧ｹ繝医↓蜈･繧後ｋ豁｣謨ｴ謨ｰ繧貞�蜉帙＠縺ｦ荳九＆縺��\n");
+  printf("蜈･蜉帙� 0 莉･荳九�謨ｴ謨ｰ繧貞�蜉帙＠縺溘→縺阪↓邨ゅｏ繧翫∪縺兔n");
   root = getlist();
 
-  printf("リストの出力\n");
+  printf("縺ｧ縺阪≠縺後▲縺溘Μ繧ｹ繝医ｒ蜃ｺ蜉帙＠縺ｾ縺吶�\n");
   putlist(root);
 
-  printf("\n削除したい要素を入力 -> \n");
+  printf("繝ｪ繧ｹ繝医�荳ｭ縺ｮ謖�ｮ壹＆繧後◆隕∫ｴ�繧帝勁蜴ｻ縺励∪縺吶�\n");
+  printf("隕∫ｴ�蛟､繧貞�蜉幢ｼ� ");
   del_num = getint();
-  root = delete(root, del_num, pst);
+  root = delete(root, del_num);
   putlist(root);
-  printf("pst = %d\n",*pst);
 
-  printf("メモリの開放");
+  printf("繝ｪ繧ｹ繝医ｒ豸亥悉縺励∪縺吶�\n");
   root = eraselist(root);
 
   return 0;
@@ -51,7 +49,7 @@ element_type *getlist(void)
 
   p = NULL;
   count = FIRST;
-  printf("要素値を入力してください -> ");
+  printf("隕∫ｴ�蛟､繧貞�蜉幢ｼ� ");
   num = getint();
   while (num > 0) {
     cur_p = (element_type *)malloc(sizeof (element_type));
@@ -64,7 +62,7 @@ element_type *getlist(void)
     cur_p->next = NULL;
     pre_p = cur_p;
     count++;
-    printf("要素値を入力してください -> ");
+    printf("隕∫ｴ�蛟､繧貞�蜉幢ｼ� ");
     num = getint();
   }
   return p;
@@ -99,30 +97,23 @@ element_type *eraselist(element_type *p)
 }
 
 
-element_type *delete(element_type *top, int val, int *pst)
+element_type *delete(element_type *top, int val)
 {
   element_type *pre_p, *cur_p;
 
-  //先頭の場合の処理
   if (top->value == val) {
     cur_p = top;
     top = top->next;
     free(cur_p);
+  } else {
+    pre_p = top;
+    cur_p = top->next;
+    while (cur_p->value != val) {
+      pre_p = cur_p;
+      cur_p = cur_p->next;
+    }
+    pre_p->next = cur_p->next;
+    free(cur_p);
   }
-   pre_p = top;
-   cur_p = top->next;
-
-   while (cur_p != NULL) {
-	if(cur_p->value == val){
-		pre_p->next = cur_p->next;
-		free(cur_p);
-		*pst = DELETED;
-		return top;
-	}
-	pre_p = cur_p;
-	cur_p = cur_p->next;
-   }
-
-   *pst = FAILED;
-   return top;
+  return top;
 }
