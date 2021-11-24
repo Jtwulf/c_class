@@ -19,6 +19,7 @@ element_type *getlist(void);
 int getint(void);
 element_type *eraselist(element_type *p);
 element_type *delete_element(int value, element_type *root);
+element_type *ins_endof_clist(element_type *root, int num);
 
 int main(){
 	element_type *root;
@@ -31,9 +32,9 @@ int main(){
 	putlist(root);
 	printf("\n");
 
-	printf("削除したい要素を入力してください -> ");
-	int value = getint();
-	root = delete_element(value,root);
+	printf("新しい要素値を入力 ->  ");
+	int num = getint();
+	root = ins_endof_clist(root, num);
 
 	printf("出来上がったリストを入力します\n");
 	putlist(root);
@@ -120,5 +121,21 @@ element_type *delete_element(int value, element_type *root){
 		}
 		p = p->next;
 	}
+	return root;
+}
+
+element_type *ins_endof_clist(element_type *root, int num){
+	element_type *last, *new;
+	new = (element_type *)malloc(sizeof(element_type));
+	last = root;
+	while(last != NULL){
+		if(last->next->value == root->value)
+			break;
+		last = last->next;
+	}
+	last->next = new;
+	new->value = num;
+	new->prev = last;
+	new->next = root;
 	return root;
 }
