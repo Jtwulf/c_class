@@ -23,8 +23,8 @@ element_type *delete(element_type *top, int val, int *pst);
 
 int main(void) {
   element_type *root;
-  int del_num, *pst;
-  pst = (int *)malloc(sizeof(int));
+  int del_num, pst;
+  //pst = (int *)malloc(sizeof(int));
   printf("リストの作成\n");
   root = getlist();
 
@@ -33,9 +33,9 @@ int main(void) {
 
   printf("\n削除したい要素を入力 -> \n");
   del_num = getint();
-  root = delete(root, del_num, pst);
+  root = delete(root, del_num, &pst);
   putlist(root);
-  printf("pst = %d\n",*pst);
+  printf("pst = %d\n",pst);
 
   printf("メモリの開放");
   root = eraselist(root);

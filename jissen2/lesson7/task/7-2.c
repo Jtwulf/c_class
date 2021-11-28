@@ -32,20 +32,18 @@ int main(){
 	printf("\n");
 
 	int a, b;
-	printf("整数A");
+	printf("整数A -> ");
 	a = getint();
-	printf("整数B");
+	printf("整数B -> ");
 	b = getint();
-	element_type *new_list;
-	new_list = delete_and_connect(root,a,b);
+	root = delete_and_connect(root,a,b);
 
 	printf("出来上がったリストを入力します\n");
-	putlist(new_list);
+	putlist(root);
 	printf("\n");
 
 	printf("リストを消去します\n");
 	root = eraselist(root);
-	new_list = eraselist(new_list);
 
 	return 0;
 }
@@ -106,7 +104,7 @@ element_type *delete_and_connect(element_type *root, int a, int b){
 	p = root;
 
 	//切り取る要素が先頭の場合
-	while((p->value >= a) && (p->value <= b)){
+	while((p->value >= a) && (p->value < b)){
 		temp = p;
 		root = p = p->next;
 
@@ -129,7 +127,7 @@ element_type *delete_and_connect(element_type *root, int a, int b){
 	while(p != NULL){
 		temp = p->next;
 		//見つかったら手前の要素から次の要素へ連結
-		if((p->value >= a) && (p->value <= b)){
+		if((p->value >= a) && (p->value < b)){
 			pre_p->next = p->next;
 
 			p->next = NULL;
