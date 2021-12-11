@@ -7,16 +7,29 @@ typedef struct node {
 	struct node *right;
 } node_type;
 
-node_type *int_bint(node_type *root, int p_key, int c_key, int lr);
+node_type *ins_bint(node_type *root, int p_key, int c_key, int lr);
 node_type *find_key(node_type *root, int key);
 void free_node(node_type *root);
 void show_tree(node_type *root);
 
 int main(){
+	node_type *root = NULL;
+
+	root = ins_bint(root,0,100,0);
+	root = ins_bint(root,100,10,0);
+	root = ins_bint(root,10,15,0);
+	root = ins_bint(root,100,20,1);
+	root = ins_bint(root,20,25,0);
+	root = ins_bint(root,20,200,1);
+	root = ins_bint(root,20,200,1);
+	root = ins_bint(root,200,150,1);
+
+	show_tree(root);
+	free_node(root);
 	return 0;
 }
 
-node_type *int_bint(node_type *root, int p_key, int c_key, int lr){
+node_type *ins_bint(node_type *root, int p_key, int c_key, int lr){
 	node_type *p, *q, *r;
 	r = (node_type *)malloc(sizeof(node_type));
 	r->key = c_key;
