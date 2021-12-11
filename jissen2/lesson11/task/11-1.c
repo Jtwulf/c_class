@@ -11,20 +11,27 @@ node_type *ins_bint(node_type *root, int p_key, int c_key, int lr);
 node_type *find_key(node_type *root, int key);
 void free_node(node_type *root);
 void show_tree(node_type *root);
+int find_max_node(node_type *root, int floor, int max);
+int count_node_size(node_type *root, int count);
 
 int main(){
 	node_type *root = NULL;
 
-	root = ins_bint(root,0,100,0);
-	root = ins_bint(root,100,10,0);
-	root = ins_bint(root,10,15,0);
-	root = ins_bint(root,100,20,1);
-	root = ins_bint(root,20,25,0);
-	root = ins_bint(root,20,200,1);
-	root = ins_bint(root,200,150,1);
+	int p_key, c_key, lr;
+	printf("2分木を作成します。\n");
+	printf("親ノードの値 ノードの値 左(0)/右(1)\n");
+	printf("をスペース区切りで入力して下さい。\n");
+	printf("左右で0か1以外の値が入力されたら、作成を終了します。\n");
+	scanf("%d %d %d",&p_key, &c_key, &lr);
+	while(lr == 0 || lr == 1){
+		root = ins_bint(root, p_key, c_key, lr);
+		scanf("%d %d %d",&p_key, &c_key, &lr);
+	}
 
 	show_tree(root);
 	printf("\n");
+	printf("この二分木のノードの数は%d\n",count_node_size(root,0));
+	//printf("最大のキー値は%d\n",find_max_node(root,2,0));
 	free_node(root);
 	return 0;
 }
@@ -60,6 +67,32 @@ node_type *ins_bint(node_type *root, int p_key, int c_key, int lr){
 	return root;
 }
 
+int count_node_size(node_type *root, int count){
+	if(root->right != NULL)
+		count_node_size(root->right, count++);
+	if(root->left != NULL)
+		count_node_size(root->left, count++);
+	return count;
+
+}
+
+int find_max_node(node_type *root, int floor, int max){
+	if(floor == 0)
+		return max;
+	else{
+		if(root->right != NULL){
+			if(root->right->key > max)
+				max = root->right->key;
+			find_max_node(root->right,floor++, max);
+		}
+		if(root->left != NULL){
+			if(root->left->key > max)
+				max = root->left->key;
+			find_max_node(root->left,floor++, max);
+		}
+	}
+}
+
 node_type *find_key(node_type *root, int key){
 	node_type *temp = NULL;
 	if(root == NULL)
@@ -89,3 +122,4 @@ void show_tree(node_type *root){
 		show_tree(root->right);
 	printf("%d ", root->key);
 }
+
