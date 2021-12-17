@@ -11,8 +11,8 @@ node_type *ins_bint(node_type *root, int p_key, int c_key, int lr);
 node_type *find_key(node_type *root, int key);
 void free_node(node_type *root);
 void show_tree(node_type *root);
-int find_max_node(node_type *root, int floor, int max);
 int count_node_size(node_type *root, int count);
+int find_max(node_type *r);
 
 int main(){
 	node_type *root = NULL;
@@ -30,10 +30,24 @@ int main(){
 
 	show_tree(root);
 	printf("\n");
-	printf("この二分木のノードの数は%d\n",count_node_size(root,0));
-	//printf("最大のキー値は%d\n",find_max_node(root,2,0));
+	printf("最大のキー値は%d\n",find_max(root));
 	free_node(root);
 	return 0;
+}
+
+int find_max(node_type *r){
+	int max = 0;
+	if(r){
+		int n;
+		max = r->key;
+		n = find_max(r->right);
+		if(max < n)
+			max = n;
+		n = find_max(r->left);
+		if(max < n)
+			max = n;
+	}
+	return max;
 }
 
 node_type *ins_bint(node_type *root, int p_key, int c_key, int lr){
@@ -73,24 +87,6 @@ int count_node_size(node_type *root, int count){
 	if(root->left != NULL)
 		count_node_size(root->left, count++);
 	return count;
-
-}
-
-int find_max_node(node_type *root, int floor, int max){
-	if(floor == 0)
-		return max;
-	else{
-		if(root->right != NULL){
-			if(root->right->key > max)
-				max = root->right->key;
-			find_max_node(root->right,floor++, max);
-		}
-		if(root->left != NULL){
-			if(root->left->key > max)
-				max = root->left->key;
-			find_max_node(root->left,floor++, max);
-		}
-	}
 }
 
 node_type *find_key(node_type *root, int key){
