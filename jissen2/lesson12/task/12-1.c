@@ -33,14 +33,6 @@ int main(){
 		return 0;
 	}
 
-	printf("探索するキー値を入力 -> ");
-	scanf("%d",&key);
-	res = search_binst(root,key);
-	if(res == NULL)
-		printf("入力されたキーが見つかりません\n");
-	else
-		printf("見つかったキーのデータは : %s\n",res->data);
-
 	int a_key, b_key;
 	node_type *a, *b, *cp;
 	printf("ノードaのキー値を入力 -> ");
