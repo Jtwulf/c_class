@@ -14,7 +14,8 @@ node_type *search_binst(node_type *root, int target);
 void free_node(node_type *root);
 void show_tree(node_type *root);
 node_type *search_cp(node_type *root, node_type *a, node_type *b);
-node_type* search_max(node_type **root);
+node_type *search_max(node_type *root);
+void show_tree(node_type *root);
 
 int main(){
 	int key, flag;
@@ -34,8 +35,7 @@ int main(){
 		return 0;
 	}
 
-	node_type *max_node = search_max(root);
-	printf("部分木の最大のキー値は : %d です\n",max_node->key);
+	show_tree(root);
 
 	free_node(root);
 	return 0;
@@ -102,19 +102,28 @@ void free_node(node_type *root){
 	free(root);
 }
 
+node_type* search_max(node_type *root){
+	node_type *r = root, *max_node = r;
+	int max = 0;
+	while(r != NULL){
+		if(max < r->key){
+			max = r->key;
+			max_node = r;
+		}
+		r = r->left;
+	}
+	return max_node;
+}
+
 void show_tree(node_type *root){
 	if(root->right != NULL)
 		show_tree(root->right);
+	printf("%d ",root->key);
+	if(root->left != NULL)
+		printf(" left : %d", root->left->key);
+	if(root->right != NULL)
+		printf(" right : %d", root->right->key);
+	printf("\n");
 	if(root->left != NULL)
 		show_tree(root->left);
-	printf("%d ", root->key);
-}
-
-node_type* search_max(node_type **root){
-	node_type *max;
-	while((*root)->right != NULL)
-		root = &((*root)->right);
-	max = *root;
-	*root = (*root)->left;
-	return max;
 }

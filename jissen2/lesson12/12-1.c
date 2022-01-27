@@ -46,22 +46,22 @@ int main()
 
 	free_node(root);
 	return 0;
-	}
+}
 
-	node_type *search_binst(node_type * root, int target)
+node_type *search_binst(node_type * root, int target)
+{
+	node_type *p = root;
+	while (p != NULL)
 	{
-		node_type *p = root;
-		while (p != NULL)
-		{
-			if (target == p->key)
-				return p;
-			else if (target < p->key)
-				p = p->left;
-			else
-				p = p->right;
-		}
-		return NULL;
+		if (target == p->key)
+			return p;
+		else if (target < p->key)
+			p = p->left;
+		else
+			p = p->right;
 	}
+	return NULL;
+}
 
 	int ins_binst(node_type * *root, int key, char *data)
 	{

@@ -10,16 +10,17 @@ typedef struct node {
 } node_type;
 
 int ins_binst(node_type **root, int key, char *data);
-node_type *search_binst(node_type *root, int target, node_type new_data);
+node_type *search_binst(node_type *root, int target);
 void free_node(node_type *root);
 void show_tree(node_type *root);
 node_type *search_cp(node_type *root, node_type *a, node_type *b);
 node_type *search_max(node_type *root);
-void delete_node(node_type **root, int key);
-node_type *search_min(node_type **p);
+void show_tree_preorder(node_type *root);
+void show_tree_inorder(node_type *root);
+void show_tree_postorder(node_type *root);
 
 int main(){
-	int key, flag, target;
+	int key, flag;
 	char data[100];
 	node_type *res, *root = NULL;
 
@@ -36,79 +37,10 @@ int main(){
 		return 0;
 	}
 
-	printf("新しく挿入するノードのキー値を入力 -> ");
-	scanf("%d",&key);
-	printf("新しく挿入するノードのデータを入力 -> ");
-	scanf("%s",data);
-	printf("置き換えるノードのキー値を入力 -> ");
-	scanf("%d",&target);
-	node_type new_data;
-	new_data.key = key;
-	strcpy(new_data.data,data);
-	search_binst(root,target,new_data);
-
-	show_tree(root);
+	show_tree_postorder(root);
 
 	free_node(root);
 	return 0;
-}
-
-node_type *search_binst(node_type * root, int target, node_type new_data){
-	node_type *p = root, *buf = p;
-	while (p != NULL){
-		if (target == p->key){
-			p->key = new_data.key;
-			strcpy(p->data,new_data.data);
-			return p;
-		}
-		else if (target < p->key)
-			p = p->left;
-		else
-			p = p->right;
-	}
-	return NULL;
-}
-
-/*
-node_type *search_binst(node_type * root, int target){
-	node_type *p = root;
-	while (p != NULL){
-		if (target == p->key)
-			return p;
-		else if (target < p->key)
-			p = p->left;
-		else
-			p = p->right;
-	}
-	return NULL;
-}
-*/
-
-void delete_node(node_type **root, int key){
-	node_type **p, *x;
-	p = root;
-	while(*p != NULL){
-		if(key == (*p)->key){
-			x = *p;
-			if(x->left == NULL && x->right == NULL)
-				*p = NULL;
-			else if(x->left == NULL)
-				*p = x->right;
-			else if(x->right == NULL)
-				*p = x->left;
-			else {
-				*p = search_min(&(x->right));
-				(*p)->right = x->right;
-				(*p)->left = x->left;
-			}
-			free(x);
-			return;
-		} else if(key < (*p)->key)
-			p = &((*p)->left);
-		else
-			p = &((*p)->right);
-	}
-	return;
 }
 
 node_type *search_cp(node_type *root, node_type *a, node_type *b){
@@ -121,6 +53,19 @@ node_type *search_cp(node_type *root, node_type *a, node_type *b){
 		else
 			return p;
 	}
+}
+
+node_type *search_binst(node_type * root, int target){
+	node_type *p = root;
+	while (p != NULL){
+		if (target == p->key)
+			return p;
+		else if (target < p->key)
+			p = p->left;
+		else
+			p = p->right;
+	}
+	return NULL;
 }
 
 int ins_binst(node_type **root, int key, char *data)
@@ -160,17 +105,11 @@ void free_node(node_type *root){
 }
 
 void show_tree(node_type *root){
-	node_type *p = root;
-	printf("%d: %s ",p->key, p->data);
-	if(p->left != NULL)
-		printf("left: %d ",p->left->key);
-	if(p->right != NULL)
-		printf("right: %d ",p->right->key);
-	printf("\n");
 	if(root->right != NULL)
 		show_tree(root->right);
 	if(root->left != NULL)
 		show_tree(root->left);
+	printf("%d ", root->key);
 }
 
 node_type* search_max(node_type *root){
@@ -186,11 +125,42 @@ node_type* search_max(node_type *root){
 	return max_node;
 }
 
-node_type *search_min(node_type **p){
-	node_type *min;
-	while((*p)->left != NULL)
-		p = &((*p)->left);
-	min = *p;
-	*p = (*p)->right;
-	return min;
+void show_tree_preorder(node_type *root){
+	printf("%d ",root->key);
+	if(root->left != NULL)
+		printf(" left : %d", root->left->key);
+	if(root->right != NULL)
+		printf(" right : %d", root->right->key);
+	printf("\n");
+	if(root->left != NULL)
+		show_tree_preorder(root->left);
+	if(root->right != NULL)
+		show_tree_preorder(root->right);
 }
+
+void show_tree_inorder(node_type *root){
+	if(root->left != NULL)
+		show_tree_inorder(root->left);
+	printf("%d ",root->key);
+	if(root->left != NULL)
+		printf(" left : %d", root->left->key);
+	if(root->right != NULL)
+		printf(" right : %d", root->right->key);
+	printf("\n");
+	if(root->right != NULL)
+		show_tree_inorder(root->right);
+}
+
+void show_tree_postorder(node_type *root){
+	if(root->left != NULL)
+		show_tree_postorder(root->left);
+	if(root->right != NULL)
+		show_tree_postorder(root->right);
+	printf("%d ",root->key);
+	if(root->left != NULL)
+		printf(" left : %d", root->left->key);
+	if(root->right != NULL)
+		printf(" right : %d", root->right->key);
+	printf("\n");
+}
+

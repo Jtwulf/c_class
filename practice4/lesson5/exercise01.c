@@ -31,3 +31,8 @@ void chomp(char *s)
 }
 
 /* ここに関数 decimal を記述する。 */
+int decimal(char *s){
+	if(*s == '\n')
+		return s;
+	if()
+}

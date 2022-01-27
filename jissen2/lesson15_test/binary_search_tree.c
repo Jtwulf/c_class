@@ -14,7 +14,8 @@ node_type *search_binst(node_type *root, int target);
 void free_node(node_type *root);
 void show_tree(node_type *root);
 node_type *search_cp(node_type *root, node_type *a, node_type *b);
-node_type* search_max(node_type **root);
+node_type *search_max(node_type *root);
+void show_tree(node_type *root);
 
 int main(){
 	int key, flag;
@@ -34,13 +35,13 @@ int main(){
 		return 0;
 	}
 
-	node_type *max_node = search_max(root);
-	printf("部分木の最大のキー値は : %d です\n",max_node->key);
+	show_tree(root);
 
 	free_node(root);
 	return 0;
 }
 
+//aとbの共通祖先ノードを探す関数
 node_type *search_cp(node_type *root, node_type *a, node_type *b){
 	node_type *p = root;
 	while(p != NULL){
@@ -53,6 +54,7 @@ node_type *search_cp(node_type *root, node_type *a, node_type *b){
 	}
 }
 
+//keyとしてtargetを持つノードのポインタを返す関数
 node_type *search_binst(node_type * root, int target){
 	node_type *p = root;
 	while (p != NULL){
@@ -66,6 +68,7 @@ node_type *search_binst(node_type * root, int target){
 	return NULL;
 }
 
+//二分探索木を生成する関数
 int ins_binst(node_type **root, int key, char *data)
 {
 	node_type *p, *q, *r;
@@ -94,6 +97,7 @@ int ins_binst(node_type **root, int key, char *data)
 	return 1;
 }
 
+//二分探索木のメモリを開放する関数
 void free_node(node_type *root){
 	if(root->left != NULL)
 		free_node(root->left);
@@ -102,19 +106,37 @@ void free_node(node_type *root){
 	free(root);
 }
 
-void show_tree(node_type *root){
-	if(root->right != NULL)
-		show_tree(root->right);
-	if(root->left != NULL)
-		show_tree(root->left);
-	printf("%d ", root->key);
+//探索木の中で最大のkeyを持つノードを返す関数
+node_type* search_max(node_type *root){
+	node_type *r = root, *max_node = r;
+	int max = 0;
+	while(r != NULL){
+		if(max < r->key){
+			max = r->key;
+			max_node = r;
+		}
+		r = r->left;
+	}
+	return max_node;
 }
 
-node_type* search_max(node_type **root){
-	node_type *max;
-	while((*root)->right != NULL)
-		root = &((*root)->right);
-	max = *root;
-	*root = (*root)->left;
-	return max;
+//二分探索木を出力する関数
+void show_tree (node_type *root){
+	printf("%d ", root->key);
+
+	if (root->left != NULL)
+		printf("\tleft: %d ", root->left->key);
+	else
+		printf("\tleft: NULL");
+
+	if (root->right != NULL)
+		printf("\tright: %d ", root->right->key);
+	else
+		printf("\tright: NULL");
+	putchar('\n');
+
+	if (root->left != NULL)
+		show_tree(root->left);
+	if (root->right != NULL)
+		show_tree(root->right);
 }
